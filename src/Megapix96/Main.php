@@ -6,6 +6,7 @@ use pocketmine\entity\Entity;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\event\entity\EntityLevelChangeEvent;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\network\protocol\MoveEntityPacket;
 use pocketmine\network\protocol\RemoveEntityPacket;

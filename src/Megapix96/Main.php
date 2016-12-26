@@ -30,14 +30,13 @@ class Main extends PluginBase implements Listener{
         	$pk->y = $p->y;
         	$pk->z = $p->z;
         	$flags = 0;
-          	$flags |= 1 << 14;
-          	$flags |= 1 << 15;
-          	$flags |= 1 << 16;
+          	$flags |= 1 << Entity::DATA_FLAG_CAN_SHOW_NAMETAG;
+          	$flags |= 1 << Entity::DATA_FLAG_ALWAYS_SHOW_NAMETAG;
+          	$flags |= 1 << Entity::DATA_FLAG_IMMOBILE;
         	$pk->metadata = [
-			38 => [7, -1],
-			24 => [0, 0],
-			4 => [4, $n],
-			0 => [7, $flags]
+			Entity::DATA_LEAD_HOLDER => [Entity::DATA_TYPE_SHORT, -1],
+			Entity::DATA_NAMETAG => [Entity::DATA_TYPE_STRING, $n],
+			Entity::DATA_FLAGS => [Entity::DATA_TYPE_LONG, $flags]
 		];
         	$this->getServer()->broadcastPacket($this->getServer()->getOnlinePlayers(), $pk);
         	foreach ($this->getServer()->getOnlinePlayers() as $pl){
@@ -49,14 +48,13 @@ class Main extends PluginBase implements Listener{
 	        		$pk->y = $p->y;
 	        		$pk->z = $p->z;
 	        		$flags = 0;
-	          		$flags |= 1 << 14;
-	          		$flags |= 1 << 15;
-	          		$flags |= 1 << 16;
-	        		$pk->metadata = [
-					38 => [7, -1],
-					24 => [0, 0],
-					4 => [4, $pl->getName()],
-					0 => [7, $flags]
+		          	$flags |= 1 << Entity::DATA_FLAG_CAN_SHOW_NAMETAG;
+		          	$flags |= 1 << Entity::DATA_FLAG_ALWAYS_SHOW_NAMETAG;
+		          	$flags |= 1 << Entity::DATA_FLAG_IMMOBILE;
+		        	$pk->metadata = [
+					Entity::DATA_LEAD_HOLDER => [Entity::DATA_TYPE_SHORT, -1],
+					Entity::DATA_NAMETAG => [Entity::DATA_TYPE_STRING, $n],
+					Entity::DATA_FLAGS => [Entity::DATA_TYPE_LONG, $flags]
 				];
 				$p->dataPacket($pk);
 			}

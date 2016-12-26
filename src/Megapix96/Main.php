@@ -37,15 +37,13 @@ class Main extends PluginBase implements Listener{
           	$flags |= 1 << Entity::DATA_FLAG_ALWAYS_SHOW_NAMETAG;
           	$flags |= 1 << Entity::DATA_FLAG_IMMOBILE;
         	$pk->metadata = [
-			Entity::DATA_LEAD_HOLDER => [Entity::DATA_TYPE_SHORT, -1],
+			Entity::DATA_LEAD_HOLDER => [Entity::DATA_TYPE_LONG, -1],
 			Entity::DATA_NAMETAG => [Entity::DATA_TYPE_STRING, $n],
 			Entity::DATA_FLAGS => [Entity::DATA_TYPE_LONG, $flags]
 		];
 
 		foreach ($p->getLevel()->getPlayers() as $pl){
-        		if ($pl->getName() !== $n){
-				$pl->dataPacket($pk);
-			}
+			$pl->dataPacket($pk);
 		}
         }
 
@@ -69,32 +67,33 @@ class Main extends PluginBase implements Listener{
 		$n = $p->getName();
 		if ($p instanceof Player){
 			foreach ($ev->getOrigin()->getPlayers() as $pl){
-				if ($pl->getName() !== $n){
+				if ($n !== $pl->getName()){
 					$pk = new RemoveEntityPacket();
 					$pk->eid = $this->eid[$n];
 					$pl->dataPacket($pk);
 				}
 			}
+			$pk = new AddEntityPacket();
+	        	$pk->eid = $this->eid[$n];
+	        	$pk->type = self::NETWORK_ID;
+	        	$pk->x = $p->x;
+	        	$pk->y = $p->y;
+	        	$pk->z = $p->z;
+	        	$flags = 0;
+	          	$flags |= 1 << Entity::DATA_FLAG_CAN_SHOW_NAMETAG;
+	          	$flags |= 1 << Entity::DATA_FLAG_ALWAYS_SHOW_NAMETAG;
+	          	$flags |= 1 << Entity::DATA_FLAG_IMMOBILE;
+	        	$pk->metadata = [
+				Entity::DATA_LEAD_HOLDER => [Entity::DATA_TYPE_LONG, -1],
+				Entity::DATA_NAMETAG => [Entity::DATA_TYPE_STRING, $n],
+				Entity::DATA_FLAGS => [Entity::DATA_TYPE_LONG, $flags]
+			];
 			foreach ($ev->getTarget()->getPlayers() as $pl){
-				if ($pl->getName() !== $n){
-					$pk = new AddEntityPacket();
-			        	$pk->eid = $this->eid[$n];
-			        	$pk->type = self::NETWORK_ID;
-			        	$pk->x = $p->x;
-			        	$pk->y = $p->y;
-			        	$pk->z = $p->z;
-			        	$flags = 0;
-			          	$flags |= 1 << Entity::DATA_FLAG_CAN_SHOW_NAMETAG;
-			          	$flags |= 1 << Entity::DATA_FLAG_ALWAYS_SHOW_NAMETAG;
-			          	$flags |= 1 << Entity::DATA_FLAG_IMMOBILE;
-			        	$pk->metadata = [
-						Entity::DATA_LEAD_HOLDER => [Entity::DATA_TYPE_SHORT, -1],
-						Entity::DATA_NAMETAG => [Entity::DATA_TYPE_STRING, $n],
-						Entity::DATA_FLAGS => [Entity::DATA_TYPE_LONG, $flags]
-					];
+				if ($n !== $pl->getName()){
 					$pl->dataPacket($pk);
 				}
 			}
+			$p->dataPacket($pk);
 		}
 	}
 }

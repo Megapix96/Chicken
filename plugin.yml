@@ -1,0 +1,6 @@
+name: Chicken
+main: Megapix96\Main
+version: 0.1
+api: [1.10.0]
+load: POSTWORLD
+author: Megapix96
